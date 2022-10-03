@@ -2,6 +2,7 @@ import board
 import busio
 import digitalio
 import time
+import supervisor
 
 import adafruit_requests as requests
 from adafruit_wiznet5k.adafruit_wiznet5k import *
@@ -90,7 +91,12 @@ wsgiServer = server.WSGIServer(80, application=web_app)
 print("Open this IP in your browser: ", eth.pretty_ip(eth.ip_address))
 
 # Start the server
-wsgiServer.start()
+try:
+    # Start the server
+    wsgiServer.start()
+except Exception as e:
+    print(e)
+    supervisor.reload()
 
 while True:
     # Our main loop where we have the server poll for incoming requests

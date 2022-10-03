@@ -2,6 +2,7 @@ import board
 import busio
 import digitalio
 import time
+import supervisor
 
 import adafruit_requests as requests
 from adafruit_wiznet5k.adafruit_wiznet5k import *
@@ -74,7 +75,11 @@ while True:
     while not r:
         try:
             print("Fetching text from", CLIENT_IP)
-            r = requests.get(f'http://{CLIENT_IP}')
+            try:
+                r = requests.get(f'http://{CLIENT_IP}')
+            except Exception as e:
+                print(e)
+                supervisor.reload()
             print("-" * 40)
             print(dir(r))
             print("-" * 40)
